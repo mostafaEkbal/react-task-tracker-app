@@ -1,23 +1,10 @@
-const tasks = [
-    {
-        id: 1,
-        name: 'mostafa',
-    },
-    {
-        id: 2,
-        name: 'mariam',
-    },
-    {
-        id: 3,
-        name: 'soha',
-    }
-]
+import Task from "./Task"
 
-const Tasks = () => {
+const Tasks = ({ tasks }) => {
   return (
     <>
         {tasks.map((task) => (
-            <h3 key={task.id}>{task.name}</h3>
+            <Task key={task.id} task={task}/>
         )
         )}
     </>
