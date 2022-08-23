@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Tasks from './components/Tasks';
 import AddTask from './components/AddTask';
 import About from './components/About';
+import TaskDetails from './components/TaskDetails';
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -102,11 +103,12 @@ function App() {
                 : ('No Tasks to show')
               )
             }
+              <Footer />
             </>
           } />
           <Route path='/about' element={ <About /> } />
+          <Route path='/task/:id' element={ <TaskDetails /> } />
         </Routes>
-        <Footer />
       </div>
     </Router>
     
