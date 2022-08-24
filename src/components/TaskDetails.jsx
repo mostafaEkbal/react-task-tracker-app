@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import Button from './Button'
 
 const TaskDetails = () => {
   const [loading, setLoading] = useState(true)
   const [task, setTask] = useState({})
-  const [error, setError] = useState(null)
 
   const params = useParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -14,7 +15,7 @@ const TaskDetails = () => {
         const data = await res.json()
 
         if(res.status === 404) {
-            setError('Task not Found')
+            navigate('/')
         }
         
         setTask(data)
@@ -22,11 +23,7 @@ const TaskDetails = () => {
     }
 
     fetchTask()
-  }, [])
-
-  if(error) {
-    return <Navigate to='/' />
-  }
+  })
 
   return loading ? (
     <h3>Loading...</h3>
@@ -34,6 +31,9 @@ const TaskDetails = () => {
     <div>
         <h3>{task.text}</h3>
         <p>{task.day}</p>
+        <Button onClick={() => {
+            navigate(-1)
+        }} text='Go Back' />
     </div>
   )
 }

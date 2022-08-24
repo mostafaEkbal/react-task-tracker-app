@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Tasks from './components/Tasks';
@@ -11,6 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [showAddTask, setShowAddTask] = useState(false);
   const [tasks, setTasks] = useState([])
+  const location = useLocation()
   
   useEffect(() => {
     const getTasks = async () => {
@@ -51,11 +52,6 @@ function App() {
     const data = await res.json()
     
     setTasks([...tasks, data])
-
-
-    /* const id = Math.floor(Math.random() * 1000) + 1;
-    const newTask = { id, ...task };
-    setTasks([...tasks, newTask]); */
   }
 
   // Delete Task
@@ -86,7 +82,6 @@ function App() {
   }
 
   return (
-    <Router>
       <div className="container">
         <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
         <Routes>
@@ -103,15 +98,13 @@ function App() {
                 : ('No Tasks to show')
               )
             }
-              <Footer />
             </>
           } />
-          <Route path='/about' element={ <About /> } />
-          <Route path='/task/:id' element={ <TaskDetails /> } />
+          <Route path='/about' element={<About />} />
+          <Route path='/task/:id' element={<TaskDetails />} />  
         </Routes>
-      </div>
-    </Router>
-    
+        {location.pathname !== '/about' && <Footer />}
+      </div>  
   );
 }
 
