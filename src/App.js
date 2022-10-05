@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Tasks from './components/Tasks';
@@ -11,7 +11,7 @@ import Signup from './components/SignUp';
 import SignIn from './components/SignIn';
 import ProtectedRoute from './components/ProtectedRoute';
 import { UserAuth } from './contexts/AuthContext';
-import { db } from './firebase';
+import { auth, db } from './firebase';
 import {
   addDoc,
   collection,
@@ -21,24 +21,24 @@ import {
   query,
   where,
 } from 'firebase/firestore';
+import Button from './components/Button';
+import { onAuthStateChanged } from 'firebase/auth';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [showAddTask, setShowAddTask] = useState(false);
   const [tasks, setTasks] = useState([]);
   const location = useLocation();
-  const { user } = UserAuth();
+  const { logOut } = UserAuth();
   const tasksRef = collection(db, 'tasks');
-  const tasksQuery = query(
-    collection(db, 'tasks'),
-    where('reminder', '==', true)
-  );
 
   useEffect(() => {
     const getTasks = async () => {
-      const tasksFromServer = await fetchTasks();
-      setTasks(tasksFromServer);
-      setLoading(false);
+      onAuthStateChanged(auth, async user => {
+        const tasksFromServer = await fetchTasks(user);
+        setTasks(tasksFromServer);
+        setLoading(false);
+      });
     };
     const getAddState = () => {
       if (localStorage.getItem('showAdd')) {
@@ -57,8 +57,8 @@ function App() {
   };
 
   //Fetch Tasks
-  const fetchTasks = async () => {
-    const res = await getDocs(tasksRef);
+  const fetchTasks = async user => {
+    const res = await getDocs(query(tasksRef, where('uid', '==', user.uid)));
     const data = [];
     res.forEach(doc => {
       data.push(doc.data());
@@ -73,6 +73,16 @@ function App() {
     const data = await res.json();
 
     return data;
+  };
+
+  // handle log out
+  const signOut = async () => {
+    try {
+      await logOut();
+      Navigate('/signIn');
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   // Add Task
@@ -142,6 +152,7 @@ function App() {
                 ) : (
                   'No Tasks to show'
                 )}
+                <Button color='blue' text='log out' onClick={signOut} />
               </ProtectedRoute>
             }
           />
