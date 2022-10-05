@@ -6,17 +6,33 @@ import Tasks from './components/Tasks';
 import AddTask from './components/AddTask';
 import About from './components/About';
 import TaskDetails from './components/TaskDetails';
-import { AuthContextProvider } from './contexts/AuthContext'; /* 
-import { UserAuth } from './contexts/AuthContext'; */
+import { AuthContextProvider } from './contexts/AuthContext';
 import Signup from './components/SignUp';
 import SignIn from './components/SignIn';
 import ProtectedRoute from './components/ProtectedRoute';
+import { UserAuth } from './contexts/AuthContext';
+import { db } from './firebase';
+import {
+  addDoc,
+  collection,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [showAddTask, setShowAddTask] = useState(false);
   const [tasks, setTasks] = useState([]);
   const location = useLocation();
+  const { user } = UserAuth();
+  const tasksRef = collection(db, 'tasks');
+  const tasksQuery = query(
+    collection(db, 'tasks'),
+    where('reminder', '==', true)
+  );
 
   useEffect(() => {
     const getTasks = async () => {
@@ -24,12 +40,14 @@ function App() {
       setTasks(tasksFromServer);
       setLoading(false);
     };
+    const getAddState = () => {
+      if (localStorage.getItem('showAdd')) {
+        setShowAddTask(localStorage.getItem('showAdd') === 'true');
+      }
+    };
 
     getTasks();
-
-    if (localStorage.getItem('showAdd')) {
-      setShowAddTask(localStorage.getItem('showAdd') === 'true');
-    }
+    getAddState();
   }, []);
 
   //Toggle Add
@@ -40,8 +58,11 @@ function App() {
 
   //Fetch Tasks
   const fetchTasks = async () => {
-    const res = await fetch('http://localhost:5000/tasks');
-    const data = await res.json();
+    const res = await getDocs(tasksRef);
+    const data = [];
+    res.forEach(doc => {
+      data.push(doc.data());
+    });
 
     return data;
   };
@@ -56,7 +77,7 @@ function App() {
 
   // Add Task
   const addTask = async task => {
-    const res = await fetch('http://localhost:5000/tasks', {
+    /* const res = await fetch('http://localhost:5000/tasks', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -66,7 +87,7 @@ function App() {
 
     const data = await res.json();
 
-    setTasks([...tasks, data]);
+    setTasks([...tasks, data]); */
   };
 
   // Delete Task
@@ -102,11 +123,7 @@ function App() {
 
   return (
     <div className='container'>
-      <Header
-        /* onAdd={() => setShowAddTask(!showAddTask)} */
-        toggleAdd={toggleAdd}
-        showAdd={showAddTask}
-      />
+      <Header toggleAdd={toggleAdd} showAdd={showAddTask} />
       <AuthContextProvider>
         <Routes>
           <Route
