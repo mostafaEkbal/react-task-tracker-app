@@ -6,6 +6,11 @@ import Tasks from './components/Tasks';
 import AddTask from './components/AddTask';
 import About from './components/About';
 import TaskDetails from './components/TaskDetails';
+import { AuthContextProvider } from './contexts/AuthContext'; /* 
+import { UserAuth } from './contexts/AuthContext'; */
+import Signup from './components/SignUp';
+import SignIn from './components/SignIn';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -21,6 +26,7 @@ function App() {
     };
 
     getTasks();
+
     if (localStorage.getItem('showAdd')) {
       setShowAddTask(localStorage.getItem('showAdd') === 'true');
     }
@@ -101,29 +107,33 @@ function App() {
         toggleAdd={toggleAdd}
         showAdd={showAddTask}
       />
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <>
-              {showAddTask && <AddTask onSave={addTask} />}
-              {loading ? (
-                <h3>Loading....</h3>
-              ) : tasks.length > 0 ? (
-                <Tasks
-                  tasks={tasks}
-                  onDelete={deleteTask}
-                  onToggle={toggleReminder}
-                />
-              ) : (
-                'No Tasks to show'
-              )}
-            </>
-          }
-        />
-        <Route path='/about' element={<About />} />
-        <Route path='/task/:id' element={<TaskDetails />} />
-      </Routes>
+      <AuthContextProvider>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <ProtectedRoute>
+                {showAddTask && <AddTask onSave={addTask} />}
+                {loading ? (
+                  <h3>Loading....</h3>
+                ) : tasks.length > 0 ? (
+                  <Tasks
+                    tasks={tasks}
+                    onDelete={deleteTask}
+                    onToggle={toggleReminder}
+                  />
+                ) : (
+                  'No Tasks to show'
+                )}
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/signin' element={<SignIn />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/task/:id' element={<TaskDetails />} />
+        </Routes>
+      </AuthContextProvider>
       {location.pathname !== '/about' && <Footer />}
     </div>
   );
