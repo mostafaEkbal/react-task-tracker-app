@@ -2,53 +2,64 @@ import { useState, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Tasks from './components/Tasks';
-import AddTask from './components/AddTask';
 import About from './components/About';
 import TaskDetails from './components/TaskDetails';
 import { AuthContextProvider } from './contexts/AuthContext';
 import Signup from './components/SignUp';
 import SignIn from './components/SignIn';
-import ProtectedRoute from './components/ProtectedRoute';
+import Home from './components/Home';
 import { UserAuth } from './contexts/AuthContext';
 import { auth, db } from './firebase';
 import {
-  addDoc,
   collection,
-  getDoc,
+  deleteDoc,
   getDocs,
-  onSnapshot,
   query,
   where,
 } from 'firebase/firestore';
-import Button from './components/Button';
 import { onAuthStateChanged } from 'firebase/auth';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [showAddTask, setShowAddTask] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [count, setCount] = useState(0);
   const location = useLocation();
   const { logOut } = UserAuth();
   const tasksRef = collection(db, 'tasks');
 
   useEffect(() => {
-    const getTasks = async () => {
-      onAuthStateChanged(auth, async user => {
-        const tasksFromServer = await fetchTasks(user);
-        setTasks(tasksFromServer);
-        setLoading(false);
-      });
-    };
-    const getAddState = () => {
-      if (localStorage.getItem('showAdd')) {
-        setShowAddTask(localStorage.getItem('showAdd') === 'true');
-      }
-    };
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        const fetchTasks = async user => {
+          const data = await getDocs(
+            query(tasksRef, where('uid', '==', user.uid))
+          );
 
-    getTasks();
-    getAddState();
-  }, []);
+          return data.docs.map(doc => {
+            return doc.data();
+          });
+        };
+
+        const getTasks = async () => {
+          if (count === 0) {
+            const tasksFromServer = await fetchTasks(user);
+            setTasks(tasksFromServer);
+            setLoading(false);
+            setCount(1);
+          }
+        };
+        const getAddState = () => {
+          if (localStorage.getItem('showAdd')) {
+            setShowAddTask(localStorage.getItem('showAdd') === 'true');
+          }
+        };
+
+        getTasks();
+        getAddState();
+      }
+    });
+  }, [setTasks, setLoading, setShowAddTask, tasksRef, count]);
 
   //Toggle Add
   const toggleAdd = () => {
@@ -57,23 +68,14 @@ function App() {
   };
 
   //Fetch Tasks
-  const fetchTasks = async user => {
-    const res = await getDocs(query(tasksRef, where('uid', '==', user.uid)));
-    const data = [];
-    res.forEach(doc => {
-      data.push(doc.data());
-    });
 
-    return data;
-  };
-
-  //Fetch Task
+  /* //Fetch Task
   const fetchTask = async id => {
     const res = await fetch(`http://localhost:5000/tasks/${id}`);
     const data = await res.json();
 
     return data;
-  };
+  }; */
 
   // handle log out
   const signOut = async () => {
@@ -102,13 +104,11 @@ function App() {
 
   // Delete Task
   const deleteTask = async id => {
-    await fetch(`http://localhost:5000/tasks/${id}`, {
-      method: 'DELETE',
-    });
+    await deleteDoc(query(tasksRef, where('createdAt', '==', id)));
 
     setTasks(tasks.filter(task => task.id !== id));
   };
-
+  /*
   // Toggle Reminder
   const toggleReminder = async id => {
     const taskToToggle = await fetchTask(id);
@@ -129,7 +129,7 @@ function App() {
         task.id === id ? { ...task, reminder: data.reminder } : task
       )
     );
-  };
+  }; */
 
   return (
     <div className='container'>
@@ -139,21 +139,15 @@ function App() {
           <Route
             path='/'
             element={
-              <ProtectedRoute>
-                {showAddTask && <AddTask onSave={addTask} />}
-                {loading ? (
-                  <h3>Loading....</h3>
-                ) : tasks.length > 0 ? (
-                  <Tasks
-                    tasks={tasks}
-                    onDelete={deleteTask}
-                    onToggle={toggleReminder}
-                  />
-                ) : (
-                  'No Tasks to show'
-                )}
-                <Button color='blue' text='log out' onClick={signOut} />
-              </ProtectedRoute>
+              <Home
+                tasks={tasks}
+                setTasks={setTasks}
+                addTask={addTask}
+                showAddTask={showAddTask}
+                signOut={signOut}
+                loading={loading}
+                onDelete={deleteTask}
+              />
             }
           />
           <Route path='/signup' element={<Signup />} />

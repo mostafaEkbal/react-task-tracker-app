@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { UserAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 
-const AddTask = ({ onSave }) => {
+const AddTask = ({ onSave, setTasks, tasks }) => {
   const [text, setText] = useState('');
   const [day, setDay] = useState('');
   const [reminder, setReminder] = useState(false);
@@ -12,13 +12,15 @@ const AddTask = ({ onSave }) => {
   const addTask = async e => {
     e.preventDefault();
     const taskRef = collection(db, 'tasks');
-    await addDoc(taskRef, {
+    const data = {
       uid: user.uid,
       text: text,
       day: day,
       reminder: reminder,
       createdAt: serverTimestamp(),
-    });
+    };
+    await addDoc(taskRef, data);
+    setTasks([...tasks, data]);
     setText('');
     setDay('');
     setReminder(false);
