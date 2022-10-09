@@ -13,6 +13,8 @@ import { auth, db } from './firebase';
 import {
   collection,
   deleteDoc,
+  doc,
+  getDoc,
   getDocs,
   query,
   where,
@@ -37,7 +39,7 @@ function App() {
           );
 
           return data.docs.map(doc => {
-            return doc.data();
+            return { ...doc.data(), id: doc.id };
           });
         };
 
@@ -104,9 +106,13 @@ function App() {
 
   // Delete Task
   const deleteTask = async id => {
-    await deleteDoc(query(tasksRef, where('createdAt', '==', id)));
-
-    setTasks(tasks.filter(task => task.id !== id));
+    try {
+      const docRef = doc(db, 'tasks', id);
+      await deleteDoc(docRef);
+      setTasks(tasks.filter(task => task.id !== id));
+    } catch (e) {
+      console.log(e.message);
+    }
   };
   /*
   // Toggle Reminder

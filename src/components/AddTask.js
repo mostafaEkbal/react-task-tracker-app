@@ -19,14 +19,15 @@ const AddTask = ({ onSave, setTasks, tasks }) => {
       reminder: reminder,
       createdAt: serverTimestamp(),
     };
-    await addDoc(taskRef, data);
-    setTasks([...tasks, data]);
+    const docAdded = await addDoc(taskRef, data);
+    console.log(docAdded.id);
+    setTasks([...tasks, { ...data, id: docAdded.id }]);
     setText('');
     setDay('');
     setReminder(false);
   };
 
-  const onSumbit = e => {
+  /* const onSumbit = e => {
     e.preventDefault();
 
     if (!text) {
@@ -39,7 +40,7 @@ const AddTask = ({ onSave, setTasks, tasks }) => {
     setText('');
     setDay('');
     setReminder(false);
-  };
+  }; */
 
   return (
     <form className='add-form'>
