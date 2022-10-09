@@ -14,9 +14,9 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -107,35 +107,29 @@ function App() {
   // Delete Task
   const deleteTask = async id => {
     try {
-      const docRef = doc(db, 'tasks', id);
+      const docRef = doc(tasksRef, id);
       await deleteDoc(docRef);
       setTasks(tasks.filter(task => task.id !== id));
     } catch (e) {
       console.log(e.message);
     }
   };
-  /*
+
   // Toggle Reminder
   const toggleReminder = async id => {
-    const taskToToggle = await fetchTask(id);
-    const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder };
-
-    const res = await fetch(`http://localhost:5000/tasks/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(updTask),
+    const selectedDoc = tasks.find(task => {
+      return task.id === id;
     });
-
-    const data = await res.json();
-
+    const docRef = doc(tasksRef, id);
+    await updateDoc(docRef, {
+      reminder: !selectedDoc.reminder,
+    });
     setTasks(
       tasks.map(task =>
-        task.id === id ? { ...task, reminder: data.reminder } : task
+        task.id === id ? { ...task, reminder: !selectedDoc.reminder } : task
       )
     );
-  }; */
+  };
 
   return (
     <div className='container'>
@@ -153,6 +147,7 @@ function App() {
                 signOut={signOut}
                 loading={loading}
                 onDelete={deleteTask}
+                onToggle={toggleReminder}
               />
             }
           />

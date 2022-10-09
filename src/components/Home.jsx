@@ -10,6 +10,7 @@ const Home = ({
   loading,
   setTasks,
   onDelete,
+  onToggle,
 }) => {
   return (
     <ProtectedRoute>
@@ -19,7 +20,7 @@ const Home = ({
       {loading ? (
         <h3>Loading....</h3>
       ) : tasks.length > 0 ? (
-        <Tasks tasks={tasks} onDelete={onDelete} />
+        <Tasks tasks={tasks} onDelete={onDelete} onToggle={onToggle} />
       ) : (
         'No Tasks to show'
       )}
