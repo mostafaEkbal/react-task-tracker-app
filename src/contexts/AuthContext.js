@@ -38,7 +38,6 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(
     () =>
       onAuthStateChanged(auth, user => {
-        console.log(user);
         setUser(user);
       }),
     []

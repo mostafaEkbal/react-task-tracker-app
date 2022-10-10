@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+package-lock.json
 
 # testing
 /coverage
@@ -26,3 +27,11 @@ yarn-error.log*
 # priv
 firebase.js
 server.js
+
+# firebase
+.firebaserc
+firebase-debug.log
+firestore.rules
+firebase.json
+firestore.indexes.json
+

@@ -20,7 +20,6 @@ const AddTask = ({ onSave, setTasks, tasks }) => {
       createdAt: serverTimestamp(),
     };
     const docAdded = await addDoc(taskRef, data);
-    console.log(docAdded.id);
     setTasks([...tasks, { ...data, id: docAdded.id }]);
     setText('');
     setDay('');

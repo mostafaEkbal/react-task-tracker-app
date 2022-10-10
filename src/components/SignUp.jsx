@@ -31,7 +31,7 @@ const Signup = () => {
       try {
         await createUser(email, password, name);
         console.log(name);
-        navigate('/account');
+        navigate('/signin');
       } catch (e) {
         setError(e.message);
         console.log(error);
@@ -50,50 +50,47 @@ const Signup = () => {
           </Link>
         </p>
       </div>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label className='py-2 font-medium'>Email Address</label>
-          <input
-            onChange={e => setEmail(e.target.value)}
-            className='border p-3'
-            type='email'
-          />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label className='py-2 font-medium'>Password</label>
-          <input
-            onChange={e => setPassword(e.target.value)}
-            className='border p-3'
-            type='password'
-          />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label className='py-2 font-medium'>Confirm Password</label>
-          <input
-            onChange={e => setConfirmPassword(e.target.value)}
-            className='border p-3'
-            type='password'
-          />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <label className='py-2 font-medium'>name</label>
-          <input
-            onChange={e => setName(e.target.value)}
-            className='border p-3'
-            type='text'
-          />
+      <form className='signin-form' onSubmit={handleSubmit}>
+        <div className=''>
+          <div>
+            <label className='py-2 font-medium'>Email Address</label>
+            <input
+              onChange={e => setEmail(e.target.value)}
+              className='border p-3'
+              type='email'
+            />
+          </div>
+          <div>
+            <label className='py-2 font-medium'>Password</label>
+            <input
+              onChange={e => setPassword(e.target.value)}
+              className='border p-3'
+              type='password'
+            />
+          </div>
+          <div>
+            <label className='py-2 font-medium'>Confirm Password</label>
+            <input
+              onChange={e => setConfirmPassword(e.target.value)}
+              className='border p-3'
+              type='password'
+            />
+          </div>
+          <div>
+            <label className='py-2 font-medium'>name</label>
+            <input
+              onChange={e => setName(e.target.value)}
+              className='border p-3'
+              type='text'
+            />
+          </div>
         </div>
         <button
           className='border border-blue-500 bg-blue-600 hover:bg-blue-500 w-full p-4 my-2 text-white'
-          type='sumbit'
-          style={{ alignSelf: 'start' }}>
+          type='sumbit'>
           Sign Up
         </button>
-        <button onClick={onClickButton} style={{ alignSelf: 'start' }}>
-          Sign Up with google
-        </button>
+        <button onClick={onClickButton}>Sign Up with google</button>
       </form>
     </div>
   );

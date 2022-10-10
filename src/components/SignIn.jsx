@@ -48,27 +48,29 @@ const SignIn = () => {
           }
         </p>
       </div>
-      <form onSubmit={handleSumbit}>
-        <div className='flex flex-col py-2'>
-          <label className='py-2 font-medium'>Email Address</label>
-          <input
-            onChange={e => setEmail(e.target.value)}
-            className='border p-3'
-            type='email'
-          />
+      <form className='signin-form' onSubmit={handleSumbit}>
+        <div>
+          <div>
+            <label className='py-2 font-medium'>Email Address</label>
+            <input
+              onChange={e => setEmail(e.target.value)}
+              className='border p-3'
+              type='email'
+            />
+          </div>
+          <div className=''>
+            <label className='py-2 font-medium'>Password</label>
+            <input
+              onChange={e => setPassword(e.target.value)}
+              className='border p-3'
+              type='password'
+            />
+          </div>
         </div>
-        <div className='flex flex-col py-2'>
-          <label className='py-2 font-medium'>Password</label>
-          <input
-            onChange={e => setPassword(e.target.value)}
-            className='border p-3'
-            type='password'
-          />
-        </div>
-        <button className='border border-blue-500 bg-blue-600 hover:bg-blue-500 w-full p-4 my-2 text-white'>
-          Sign In
+        <button className='signin-btn'>Sign In</button>
+        <button className='signin-btn' onClick={onClickButton}>
+          Sign In with google
         </button>
-        <button onClick={onClickButton}>Sign In with google</button>
       </form>
     </div>
   );
