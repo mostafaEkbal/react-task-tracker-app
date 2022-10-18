@@ -10,7 +10,7 @@ const AddTask = ({ onSave, setTasks, tasks }) => {
   const [reminder, setReminder] = useState(false);
   const { user } = UserAuth();
 
-  function tConvert(time) {
+  const tConvert = time => {
     // Check correct time format and split into components
     time = time
       .toString()
@@ -23,7 +23,7 @@ const AddTask = ({ onSave, setTasks, tasks }) => {
       time[0] = +time[0] % 12 || 12; // Adjust hours
     }
     return time.join(''); // return adjusted time or original string
-  }
+  };
 
   const addTask = async e => {
     e.preventDefault();
@@ -36,12 +36,33 @@ const AddTask = ({ onSave, setTasks, tasks }) => {
       reminder: reminder,
       createdAt: serverTimestamp(),
     };
+    reminderCheck(data);
     const docAdded = await addDoc(taskRef, data);
     setTasks([...tasks, { ...data, id: docAdded.id }]);
     setText('');
     setDay('');
     setTime('');
     setReminder(false);
+  };
+
+  const reminderCheck = data => {
+    if (reminder) {
+      Notification.requestPermission().then(perm => {
+        if (perm === 'granted') {
+          const notification = new Notification(
+            `(${text}) Task has been created`,
+            {
+              body: `You will get a reminder on ${day} at ${tConvert(time)}`,
+              data: data,
+              tag: 'task reminder',
+            }
+          );
+          notification.addEventListener('error', e => {
+            console.log(e);
+          });
+        }
+      });
+    }
   };
 
   /* const onSumbit = e => {
