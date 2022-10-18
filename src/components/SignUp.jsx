@@ -17,7 +17,7 @@ const Signup = () => {
     setError('');
     try {
       await signInWithGoogle();
-      navigate('/signin');
+      navigate('/');
     } catch (e) {
       setError(e.message);
       console.log(error);
