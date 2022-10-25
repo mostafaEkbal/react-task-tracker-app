@@ -115,10 +115,16 @@ body {
   padding: .5rem;
   border: none;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
 }
 
 .signin-form button:hover {
   opacity: .9;
+}
+
+.signin-form span {
+  flex: 1;
 }
 
 .form-control-check {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserAuth } from '../contexts/AuthContext';
+import { FcGoogle } from 'react-icons/fc';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -90,7 +91,10 @@ const Signup = () => {
           type='sumbit'>
           Sign Up
         </button>
-        <button onClick={onClickButton}>Sign Up with google</button>
+        <button onClick={onClickButton}>
+          <span>Sign Up with google</span>
+          <FcGoogle size='20'></FcGoogle>
+        </button>
       </form>
     </div>
   );

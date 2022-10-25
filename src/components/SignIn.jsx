@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { UserAuth } from '../contexts/AuthContext';
+import { FcGoogle } from 'react-icons/fc';
 
 const SignIn = () => {
   const [email, setEmail] = useState();
@@ -36,7 +37,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className='max-w-[700px] mx-auto my-16 p-4'>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
       <div>
         <h1 className='text-2xl font-bold py-2'>Sign in to your account</h1>
         <p className='py-2'>
@@ -49,6 +50,12 @@ const SignIn = () => {
         </p>
       </div>
       <form className='signin-form' onSubmit={handleSumbit}>
+        <button className='signin-btn' onClick={onClickButton}>
+          <span>Sign In with google</span>
+          <FcGoogle size='20'></FcGoogle>
+        </button>
+        <p style={{ alignSelf: 'center' }}>Or</p>
+        <hr />
         <div>
           <div>
             <label className='py-2 font-medium'>Email Address</label>
@@ -68,9 +75,6 @@ const SignIn = () => {
           </div>
         </div>
         <button className='signin-btn'>Sign In</button>
-        <button className='signin-btn' onClick={onClickButton}>
-          Sign In with google
-        </button>
       </form>
     </div>
   );
