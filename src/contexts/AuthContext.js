@@ -12,28 +12,24 @@ import { auth } from '../firebase';
 
 const UserContext = createContext();
 
-export const AuthContextProvider = ({ children }) => {
+export function AuthContextProvider({ children }) {
   const [user, setUser] = useState({});
 
-  const createUser = async (email, password, name) => {
-    return createUserWithEmailAndPassword(auth, email, password).then(() => {
+  const createUser = async (email, password, name) =>
+    createUserWithEmailAndPassword(auth, email, password).then(() => {
       const user = auth.currentUser;
       updateProfile(user, { displayName: name });
     });
-  };
 
-  const authUser = async (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
+  const authUser = async (email, password) =>
+    signInWithEmailAndPassword(auth, email, password);
 
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
   };
 
-  const logOut = () => {
-    return signOut(auth);
-  };
+  const logOut = () => signOut(auth);
 
   useEffect(
     () =>
@@ -45,12 +41,16 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ createUser, authUser, signInWithGoogle, user, logOut }}>
+      value={{
+        createUser,
+        authUser,
+        signInWithGoogle,
+        user,
+        logOut,
+      }}>
       {children}
     </UserContext.Provider>
   );
-};
+}
 
-export const UserAuth = () => {
-  return useContext(UserContext);
-};
+export const UserAuth = () => useContext(UserContext);

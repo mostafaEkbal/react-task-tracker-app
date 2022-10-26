@@ -1,9 +1,11 @@
+/* eslint-disable jsx-quotes */
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { UserAuth } from '../contexts/AuthContext';
 import { FcGoogle } from 'react-icons/fc';
+// eslint-disable-next-line linebreak-style
+import { UserAuth } from '../contexts/AuthContext';
 
-const SignIn = () => {
+function SignIn() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState();
@@ -17,9 +19,8 @@ const SignIn = () => {
     try {
       await signInWithGoogle();
       navigate('/');
-    } catch (e) {
-      setError(e.message);
-      console.log(error);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -30,29 +31,26 @@ const SignIn = () => {
     try {
       await authUser(email, password);
       navigate('/');
-    } catch (e) {
-      setError(e.message);
-      console.log(e.message);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div>
         <h1 className='text-2xl font-bold py-2'>Sign in to your account</h1>
         <p className='py-2'>
-          Don't have an account yet?{' '}
-          {
-            <Link to='/signup' className='underline'>
-              Sign up.
-            </Link>
-          }
+          Don&apos;t have an account yet?
+          <Link to='/signup' className='underline'>
+            Sign up.
+          </Link>
         </p>
       </div>
       <form className='signin-form' onSubmit={handleSumbit}>
         <button className='signin-btn' onClick={onClickButton}>
           <span>Sign In with google</span>
-          <FcGoogle size='20'></FcGoogle>
+          <FcGoogle size='20' />
         </button>
         <p style={{ alignSelf: 'center' }}>Or</p>
         <hr />
@@ -66,7 +64,9 @@ const SignIn = () => {
             />
           </div>
           <div className=''>
-            <label className='py-2 font-medium'>Password</label>
+            <label htmlFor='password' className='py-2 font-medium'>
+              {' '}
+            </label>
             <input
               onChange={e => setPassword(e.target.value)}
               className='border p-3'
@@ -74,10 +74,12 @@ const SignIn = () => {
             />
           </div>
         </div>
-        <button className='signin-btn'>Sign In</button>
+        <button type='submit' className='signin-btn'>
+          Sign In
+        </button>
       </form>
     </div>
   );
-};
+}
 
 export default SignIn;
