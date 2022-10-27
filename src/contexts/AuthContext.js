@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   updateProfile,
   signOut,
+  FacebookAuthProvider,
 } from 'firebase/auth';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase';
@@ -29,6 +30,11 @@ export function AuthContextProvider({ children }) {
     return signInWithPopup(auth, provider);
   };
 
+  const signInWithFacebook = () => {
+    const provider = new FacebookAuthProvider();
+    return signInWithPopup(auth, provider);
+  };
+
   const logOut = () => signOut(auth);
 
   useEffect(
@@ -47,6 +53,7 @@ export function AuthContextProvider({ children }) {
         signInWithGoogle,
         user,
         logOut,
+        signInWithFacebook,
       }}>
       {children}
     </UserContext.Provider>

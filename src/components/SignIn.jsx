@@ -6,9 +6,9 @@ import { FcGoogle } from 'react-icons/fc';
 import { UserAuth } from '../contexts/AuthContext';
 
 function SignIn() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [error, setError] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState({});
   const { authUser } = UserAuth();
   const { signInWithGoogle } = UserAuth();
   const navigate = useNavigate();
@@ -32,7 +32,24 @@ function SignIn() {
       await authUser(email, password);
       navigate('/');
     } catch (err) {
-      setError(err.message);
+      setError(err);
+    }
+  };
+
+  const checkError = errorCode => {
+    let errorMessage = '';
+    switch (errorCode) {
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid Email';
+        break;
+      case 'auth/wrong-password':
+        errorMessage = 'Wrong Password, Try Again';
+        break;
+      case 'auth/user-not-found':
+        errorMessage = 'User Not Found';
+    }
+    if (errorCode) {
+      return <div className='signin-error'>{errorMessage}</div>;
     }
   };
 
@@ -55,6 +72,7 @@ function SignIn() {
         <p style={{ alignSelf: 'center' }}>Or</p>
         <hr />
         <div>
+          {checkError(error.code)}
           <div>
             <label className='py-2 font-medium'>Email Address</label>
             <input
@@ -63,9 +81,9 @@ function SignIn() {
               type='email'
             />
           </div>
-          <div className=''>
+          <div>
             <label htmlFor='password' className='py-2 font-medium'>
-              {' '}
+              Password
             </label>
             <input
               onChange={e => setPassword(e.target.value)}
