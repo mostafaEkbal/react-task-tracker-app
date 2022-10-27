@@ -1,8 +1,6 @@
-/* eslint-disable jsx-quotes */
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-// eslint-disable-next-line linebreak-style
 import { UserAuth } from '../contexts/AuthContext';
 
 function SignIn() {
@@ -58,7 +56,7 @@ function SignIn() {
       <div>
         <h1 className='text-2xl font-bold py-2'>Sign in to your account</h1>
         <p className='py-2'>
-          Don&apos;t have an account yet?
+          Don&apos;t have an account yet?{' '}
           <Link to='/signup' className='underline'>
             Sign up.
           </Link>

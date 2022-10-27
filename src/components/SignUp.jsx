@@ -20,8 +20,7 @@ const Signup = () => {
       await signInWithGoogle();
       navigate('/');
     } catch (e) {
-      setError(e.message);
-      console.log(error);
+      setError(e);
     }
   };
 
@@ -31,13 +30,28 @@ const Signup = () => {
     if (password === confirmPassword) {
       try {
         await createUser(email, password, name);
-        console.log(name);
         navigate('/signin');
       } catch (e) {
-        setError(e.message);
-        console.log(error);
+        setError(e);
       }
-    } else console.log('password dont match');
+    } else setError({ code: 'auth/password-dont-match' });
+  };
+
+  const checkError = errorCode => {
+    let errorMessage = '';
+    switch (errorCode) {
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid Email';
+        break;
+      case 'auth/password-dont-match':
+        errorMessage = "Password doesn't match, Try Again";
+        break;
+      case 'auth/weak-password':
+        errorMessage = 'Password is too weak, should be at least 6 characters';
+    }
+    if (errorCode) {
+      return <div className='signin-error'>{errorMessage}</div>;
+    }
   };
 
   return (
@@ -53,6 +67,7 @@ const Signup = () => {
       </div>
       <form className='signin-form' onSubmit={handleSubmit}>
         <div className=''>
+          {checkError(error.code)}
           <div>
             <label className='py-2 font-medium'>Email Address</label>
             <input
