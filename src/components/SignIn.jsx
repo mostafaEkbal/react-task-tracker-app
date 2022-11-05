@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
+import { ImFacebook } from 'react-icons/im';
 import { UserAuth } from '../contexts/AuthContext';
 
 function SignIn() {
@@ -8,14 +9,25 @@ function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState({});
   const { authUser } = UserAuth();
-  const { signInWithGoogle } = UserAuth();
+  const { signInWithGoogle, signInWithFacebook } = UserAuth();
   const navigate = useNavigate();
 
-  const onClickButton = async e => {
+  const onClickButtonG = async e => {
     e.preventDefault();
     setError('');
     try {
       await signInWithGoogle();
+      navigate('/');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const onClickButtonF = async e => {
+    e.preventDefault();
+    setError('');
+    try {
+      await signInWithFacebook();
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -63,9 +75,17 @@ function SignIn() {
         </p>
       </div>
       <form className='signin-form' onSubmit={handleSumbit}>
-        <button className='signin-btn' onClick={onClickButton}>
-          <span>Sign In with google</span>
+        <button
+          className='signin-btn signin-btn--white'
+          onClick={onClickButtonG}>
+          <span>Sign In with Google</span>
           <FcGoogle size='20' />
+        </button>
+        <button
+          className='signin-btn signin-btn--white'
+          onClick={onClickButtonF}>
+          <span>Sign In with Facebook</span>
+          <ImFacebook size='20' />
         </button>
         <p style={{ alignSelf: 'center' }}>Or</p>
         <hr />
@@ -90,8 +110,8 @@ function SignIn() {
             />
           </div>
         </div>
-        <button type='submit' className='signin-btn'>
-          Sign In
+        <button onClick={handleSumbit} className='signin-btn'>
+          <span>Sign In</span>
         </button>
       </form>
     </div>
