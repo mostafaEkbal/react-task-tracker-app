@@ -55,7 +55,7 @@ const Signup = () => {
   };
 
   return (
-    <div className='max-w-[700px] mx-auto my-16 p-4'>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div>
         <h1 className='text-2xl font-bold py-2'>Sign up for a free account</h1>
         <p className='py-2'>
@@ -66,6 +66,12 @@ const Signup = () => {
         </p>
       </div>
       <form className='signin-form' onSubmit={handleSubmit}>
+        <button className='signin-btn signin-btn--white' onClick={onClickButton}>
+          <span>Sign Up with Google</span>
+          <FcGoogle size='20'></FcGoogle>
+        </button>
+      <p style={{ alignSelf: 'center' }}>Or</p>
+        <hr />
         <div className=''>
           {checkError(error.code)}
           <div>
@@ -102,13 +108,9 @@ const Signup = () => {
           </div>
         </div>
         <button
-          className='border border-blue-500 bg-blue-600 hover:bg-blue-500 w-full p-4 my-2 text-white'
+          className='signin-btn'
           type='sumbit'>
           Sign Up
-        </button>
-        <button onClick={onClickButton}>
-          <span>Sign Up with google</span>
-          <FcGoogle size='20'></FcGoogle>
         </button>
       </form>
     </div>

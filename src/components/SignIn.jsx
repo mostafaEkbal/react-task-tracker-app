@@ -81,12 +81,12 @@ function SignIn() {
           <span>Sign In with Google</span>
           <FcGoogle size='20' />
         </button>
-        <button
+        {/* <button
           className='signin-btn signin-btn--white'
           onClick={onClickButtonF}>
           <span>Sign In with Facebook</span>
           <ImFacebook size='20' />
-        </button>
+        </button> */}
         <p style={{ alignSelf: 'center' }}>Or</p>
         <hr />
         <div>
