@@ -28,10 +28,11 @@ yarn-error.log*
 firebase.js
 server.js
 
-# firebase
+# firebase config files
 .firebaserc
 firebase-debug.log
 firestore.rules
 firebase.json
 firestore.indexes.json
+.firebase/
 
