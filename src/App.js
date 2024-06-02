@@ -69,16 +69,6 @@ function App() {
     setShowAddTask(localStorage.getItem('showAdd') === 'true');
   };
 
-  //Fetch Tasks
-
-  /* //Fetch Task
-  const fetchTask = async id => {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`);
-    const data = await res.json();
-
-    return data;
-  }; */
-
   // handle log out
   const signOut = async () => {
     try {
@@ -88,7 +78,6 @@ function App() {
       console.log(e.message);
     }
   };
-
 
   // Delete Task
   const deleteTask = async id => {
