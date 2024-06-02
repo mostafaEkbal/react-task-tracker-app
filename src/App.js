@@ -93,7 +93,7 @@ function App() {
   const addTask = async task => {
     /* const res = await fetch('http://localhost:5000/tasks', {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-type': 'application/json',
       },
       body: JSON.stringify(task),
