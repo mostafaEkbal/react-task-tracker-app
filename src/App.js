@@ -69,6 +69,16 @@ function App() {
     setShowAddTask(localStorage.getItem('showAdd') === 'true');
   };
 
+  //Fetch Tasks
+
+  /* //Fetch Task
+  const fetchTask = async id => {
+    const res = await fetch(`http://localhost:5000/tasks/${id}`);
+    const data = await res.json();
+
+    return data;
+  }; */
+
   // handle log out
   const signOut = async () => {
     try {
@@ -77,6 +87,21 @@ function App() {
     } catch (e) {
       console.log(e.message);
     }
+  };
+
+  // Add Task
+  const addTask = async task => {
+    /* const res = await fetch('http://localhost:5000/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(task),
+    });
+
+    const data = await res.json();
+
+    setTasks([...tasks, data]); */
   };
 
   // Delete Task
