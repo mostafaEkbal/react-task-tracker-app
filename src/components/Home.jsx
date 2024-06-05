@@ -5,7 +5,6 @@ import AddTask from './AddTask';
 import Tasks from './Tasks';
 const Home = ({
   tasks,
-  addTask,
   showAddTask,
   signOut,
   loading,
@@ -16,7 +15,7 @@ const Home = ({
   return (
     <ProtectedRoute>
       {showAddTask && (
-        <AddTask onSave={addTask} tasks={tasks} setTasks={setTasks} />
+        <AddTask tasks={tasks} setTasks={setTasks} />
       )}
       {loading ? (
         <h3>Loading....</h3>

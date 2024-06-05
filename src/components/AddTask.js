@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { UserAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 
-const AddTask = ({ onSave, setTasks, tasks }) => {
+const AddTask = ({ setTasks, tasks }) => {
   const [text, setText] = useState('');
   const [day, setDay] = useState('');
   const [time, setTime] = useState('');
